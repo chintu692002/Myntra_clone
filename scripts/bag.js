@@ -1,4 +1,4 @@
-const CONVENIENCE_FEES = 99;
+
 let bagItemObjects;
 onLoad();
 
@@ -13,13 +13,23 @@ function displayBagSummary() {
   let totalItem = bagItemObjects.length;
   let totalMRP = 0;
   let totalDiscount = 0;
+  let CONVENIENCE_FEES = 0;
 
   bagItemObjects.forEach(bagItem => {
     totalMRP += bagItem.original_price;
     totalDiscount += bagItem.original_price - bagItem.current_price;
   });
 
-  let finalPayment = totalMRP - totalDiscount + CONVENIENCE_FEES;
+  let finalPayment = totalMRP - totalDiscount ;
+  if(finalPayment==0)
+  {
+    CONVENIENCE_FEES=0;
+  }
+  if(finalPayment>0)
+  {
+    CONVENIENCE_FEES=99;
+    finalPayment+=99;
+  }
   
 
   bagSummaryElement.innerHTML = `
@@ -35,7 +45,7 @@ function displayBagSummary() {
     </div>
     <div class="price-item">
       <span class="price-item-tag">Convenience Fee</span>
-      <span class="price-item-value">₹99</span>
+      <span class="price-item-value">${CONVENIENCE_FEES}</span>
     </div>
     <hr>
     <div class="price-footer">
@@ -49,6 +59,7 @@ function displayBagSummary() {
   `;
 }
 
+//-----------itemid thi usse items nikala h-----------------------------
 function loadBagItemObjects() {
   console.log(bagItems);
   bagItemObjects = bagItems.map(itemId => {
